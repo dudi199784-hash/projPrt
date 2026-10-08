@@ -1,4 +1,4 @@
-package com.practiceAiAtena.projPrt;
+package com.practiceAiAtena;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
