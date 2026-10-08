@@ -25,8 +25,15 @@ public class ApiV1ArticleController {
     }
 
     @GetMapping("/{id}")  //--- 단건 조회
-    public Article getArticle(@PathVariable("id") Long id){
-        Article article = articleService.getArticle();
-        return article;
+    public RsData<Article> getArticle(@PathVariable("id") Long id){
+        return articleService.getArticle(id).map(article -> RsData.of(
+                "S-1",
+                "성공",
+                article
+        )).orElseGet(()-> RsData.of(
+                "F-1",
+                "%d번 게시물은 존재하지않습니다.".formatted(id),
+                null
+        ));
     }
 }
