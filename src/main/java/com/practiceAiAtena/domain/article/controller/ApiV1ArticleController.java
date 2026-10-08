@@ -1,6 +1,8 @@
 package com.practiceAiAtena.domain.article.controller;
 
 import com.practiceAiAtena.domain.article.entity.Article;
+import com.practiceAiAtena.domain.article.service.ArticleService;
+import com.practiceAiAtena.global.rsdata.RsData;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -14,17 +16,17 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/articles")
 public class ApiV1ArticleController {
+    private final ArticleService articleService;
 
     @GetMapping //--- 다건 조회
-    public List<Article> getArticles(){
-        List<Article> articles = new ArrayList<>();
-        return articles;
-
+    public RsData<List<Article>> getArticles(){
+        List<Article> articles = articleService.getList();
+        return RsData.of("S-1","성공",articles);
     }
 
     @GetMapping("/{id}")  //--- 단건 조회
     public Article getArticle(@PathVariable("id") Long id){
-        Article article = new Article();
+        Article article = articleService.getArticle();
         return article;
     }
 }

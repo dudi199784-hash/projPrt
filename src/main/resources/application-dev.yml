@@ -11,7 +11,7 @@ spring:
   datasource:
     url: jdbc:h2:mem:db_dev;MODE=MYSQL
     username: doen
-    password:
+    password: 123
     driver-class-name: org.h2.Driver
 
   # datasource:
