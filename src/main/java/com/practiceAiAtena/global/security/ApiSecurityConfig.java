@@ -1,6 +1,7 @@
 
 package com.practiceAiAtena.global.security;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
@@ -10,21 +11,19 @@ import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
 @EnableWebSecurity
-public class SecurityConfig {
+@RequiredArgsConstructor
+public class ApiSecurityConfig {
 
     @Bean
-    @Order(2)
-    SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+    @Order(1)
+    SecurityFilterChain apiFilterChain(HttpSecurity http) throws Exception {
         http
-                .authorizeHttpRequests(auth -> auth
-                        .anyRequest().permitAll()
+                .securityMatcher("/api/**")
+                .authorizeHttpRequests(authorizeRequests -> authorizeRequests
+                        .requestMatchers("/api/*/articles").permitAll()
+                        .anyRequest().authenticated()
                 )
-                .csrf(csrf -> csrf
-                        .ignoringRequestMatchers("/h2-console/**")
-                )
-                .headers(headers -> headers
-                        .frameOptions(frame -> frame.sameOrigin())
-                );
+                .csrf(csrf -> csrf.disable());
 
         return http.build();
     }
