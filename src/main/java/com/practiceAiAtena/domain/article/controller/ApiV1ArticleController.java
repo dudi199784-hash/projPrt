@@ -18,17 +18,13 @@ public class ApiV1ArticleController {
     @GetMapping //--- 다건 조회
     public List<Article> getArticles(){
         List<Article> articles = new ArrayList<>();
-        articles.add(new Article(1L));
-        articles.add(new Article(2L));
-        articles.add(new Article(3L));
-
         return articles;
 
     }
 
     @GetMapping("/{id}")  //--- 단건 조회
     public Article getArticle(@PathVariable("id") Long id){
-        Article article = new Article(id);
+        Article article = new Article();
         return article;
     }
 }
