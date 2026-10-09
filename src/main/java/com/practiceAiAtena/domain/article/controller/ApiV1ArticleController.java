@@ -2,14 +2,12 @@ package com.practiceAiAtena.domain.article.controller;
 
 import com.practiceAiAtena.domain.article.dto.ArticleResponse;
 import com.practiceAiAtena.domain.article.dto.ArticlesResponse;
+import com.practiceAiAtena.domain.article.dto.WriteRequest;
 import com.practiceAiAtena.domain.article.entity.Article;
 import com.practiceAiAtena.domain.article.service.ArticleService;
 import com.practiceAiAtena.global.rsdata.RsData;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,5 +35,12 @@ public class ApiV1ArticleController {
                 "%d번 게시물은 존재하지않습니다.".formatted(id),
                 null
         ));
+    }
+
+    @PostMapping("")
+    public RsData<Article> write(@RequestBody WriteRequest writeRequest){
+        articleService.create(writeRequest.getTitle(),writeRequest.getContent());
+//        System.out.println(writeRequest.getTitle());
+        return RsData.of("S-2","작성 성공");
     }
 }
