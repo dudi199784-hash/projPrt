@@ -36,4 +36,18 @@ public class ArticleService {
         return RsData.of("S-2","작성 성공",article);
     }
 
+    public Optional<Article> findById(Long id) {
+        return articleRepository.findById(id);
+    }
+
+    public RsData<Article> modify(Article article, String title, String content) {
+        article.setTitle(title);
+        article.setContent(content);
+        articleRepository.save(article);
+        return RsData.of(
+                "S-3",
+                "%d번 게시물이 수정되었습니다.".formatted(article.getId()),
+                article
+        );
+    }
 }

@@ -1,9 +1,6 @@
 package com.practiceAiAtena.domain.article.controller;
 
-import com.practiceAiAtena.domain.article.dto.ArticleResponse;
-import com.practiceAiAtena.domain.article.dto.ArticlesResponse;
-import com.practiceAiAtena.domain.article.dto.WriteRequest;
-import com.practiceAiAtena.domain.article.dto.WriteResponse;
+import com.practiceAiAtena.domain.article.dto.*;
 import com.practiceAiAtena.domain.article.entity.Article;
 import com.practiceAiAtena.domain.article.service.ArticleService;
 import com.practiceAiAtena.global.rsdata.RsData;
@@ -13,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
@@ -56,4 +54,22 @@ public class ApiV1ArticleController {
                 new WriteResponse(writeRs.data())
                 );
     }
+
+    @PatchMapping("/{id}")
+    public RsData<ModifyResponse> modify(@Valid @RequestBody ModifyRequest modifyRequest, @PathVariable("id") Long id){
+        Optional<Article> opArticle = articleService.findById(id);
+        if(opArticle.isEmpty()){
+            return RsData.of(
+                    "F-1",
+                    "%d번 게시물이 존재하지 않습니다.".formatted(id)
+            );
+        }
+        RsData<Article> modifyRs = articleService.modify(opArticle.get(),modifyRequest.getTitle(),modifyRequest.getContent());
+        return RsData.of(
+                modifyRs.resultCode(),
+                modifyRs.msg(),
+                new ModifyResponse(modifyRs.data())
+        );
+    }
+
 }
