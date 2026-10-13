@@ -3,9 +3,11 @@ package com.practiceAiAtena.domain.article.controller;
 import com.practiceAiAtena.domain.article.dto.ArticleResponse;
 import com.practiceAiAtena.domain.article.dto.ArticlesResponse;
 import com.practiceAiAtena.domain.article.dto.WriteRequest;
+import com.practiceAiAtena.domain.article.dto.WriteResponse;
 import com.practiceAiAtena.domain.article.entity.Article;
 import com.practiceAiAtena.domain.article.service.ArticleService;
 import com.practiceAiAtena.global.rsdata.RsData;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -38,9 +40,20 @@ public class ApiV1ArticleController {
     }
 
     @PostMapping("")
-    public RsData<Article> write(@RequestBody WriteRequest writeRequest){
-        articleService.create(writeRequest.getTitle(),writeRequest.getContent());
-//        System.out.println(writeRequest.getTitle());
-        return RsData.of("S-2","작성 성공");
+    public RsData<WriteResponse> write(@Valid @RequestBody WriteRequest writeRequest){
+        RsData<Article> writeRs = articleService.create(writeRequest.getTitle(),writeRequest.getContent());
+
+        if (writeRs.isFail()) {
+            return RsData.of(
+                    writeRs.resultCode(),
+                    writeRs.msg()
+            );
+        }
+
+        return RsData.of(
+                writeRs.resultCode(),
+                writeRs.msg(),
+                new WriteResponse(writeRs.data())
+                );
     }
 }

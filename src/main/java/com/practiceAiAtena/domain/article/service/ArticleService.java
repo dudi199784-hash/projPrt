@@ -2,6 +2,8 @@ package com.practiceAiAtena.domain.article.service;
 
 import com.practiceAiAtena.domain.article.entity.Article;
 import com.practiceAiAtena.domain.article.repository.ArticleRepository;
+import com.practiceAiAtena.global.rsdata.RsData;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.antlr.v4.runtime.misc.LogManager;
 import org.springframework.stereotype.Service;
@@ -23,13 +25,15 @@ public class ArticleService {
         return articleRepository.findById(id);
     }
 
-    public void create(String title, String content) {
+    @Transactional
+    public RsData<Article> create(String title, String content) {
         Article article  = Article.builder()
                 .title(title)
                 .content(content)
                 .build();
 
         articleRepository.save(article);
+        return RsData.of("S-2","작성 성공",article);
     }
 
 }
