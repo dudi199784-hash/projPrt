@@ -72,4 +72,20 @@ public class ApiV1ArticleController {
         );
     }
 
+    @DeleteMapping("/{id")
+    public RsData<DeleteResponse> delete(@PathVariable("id") Long id){
+        Optional<Article> opArticle = articleService.findById(id);
+        if(opArticle.isEmpty()){
+            return RsData.of(
+                    "F-1",
+                    "%d번 게시물이 존재하지 않습니다.".formatted(id)
+            );
+        }
+        RsData<Article> deleteRs = articleService.delete(id);
+        return RsData.of(
+                deleteRs.resultCode(),
+                deleteRs.msg(),
+                new DeleteResponse(opArticle.get())
+        );
+    }
 }
